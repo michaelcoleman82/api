@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "serverless": "^1.23.0"
+  },
+  "scripts":{
+    "push": "echo 'vars.yml' >> .gitignore && git add -A && git commit -m \"$msg\" && git push"
+  }
+}

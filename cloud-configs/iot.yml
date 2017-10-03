@@ -1,0 +1,35 @@
+Pi:
+  Type: AWS::IoT::Thing
+  Properties:
+    ThingName: ${self:custom.vars.ThingName}
+PiAttachment:
+  Type: AWS::IoT::ThingPrincipalAttachment
+  Properties:
+    Principal: ${self:custom.vars.CertificateARN}
+    ThingName:
+      Ref: Pi
+
+
+PiPolicy:
+  Type: AWS::IoT::Policy
+  Properties:
+    PolicyDocument:
+      Version: '2012-10-17'
+      Statement:
+      - Action: iot:Publish
+        Effect: Allow
+        Resource:
+          Fn::Join:
+          - ''
+          - - 'arn:aws:iot:'
+            - Ref: AWS::Region
+            - ":"
+            - Ref: AWS::AccountId
+            - :topic/${self:custom.vars.Topic}/${self:custom.vars.ThingName}
+
+PiPolicyAttachment:
+  Type: AWS::IoT::PolicyPrincipalAttachment
+  Properties:
+    PolicyName:
+      Ref: PiPolicy
+    Principal: ${self:custom.vars.CertificateARN}
